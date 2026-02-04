@@ -1,8 +1,8 @@
+
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    // 🔹 Basic Info
     username: {
       type: String,
       required: true,
@@ -14,28 +14,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true,
     },
 
     password: {
       type: String,
-      required: function () {
-        return !this.isGoogleUser; // password not required for Google users
-      },
     },
 
-    // 🔹 Google Authentication
+    // 🔥 REQUIRED FOR GOOGLE AUTH
     googleId: {
       type: String,
-      default: null,
+      unique: true,
+      sparse: true, // allows normal users without googleId
     },
 
-    isGoogleUser: {
-      type: Boolean,
-      default: false,
+    name: {
+      type: String,
+      default: "",
     },
 
-    // 🔹 Profile Info
     bio: {
       type: String,
       default: "",
@@ -46,13 +42,11 @@ const userSchema = new mongoose.Schema(
       default: "",
     },
 
-    // 🔒 Privacy
     isPrivate: {
       type: Boolean,
       default: false,
     },
 
-    // 🔁 Social Connections
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -67,19 +61,23 @@ const userSchema = new mongoose.Schema(
       },
     ],
 
-    // 🔔 Follow requests (for private accounts)
+    // ✅ PRIVATE ACCOUNT FOLLOW REQUESTS
     followRequests: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
+
+    // ✅ SAVED POSTS
+    savedPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ],
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
-
-export default User;
+export default mongoose.model("User", userSchema);

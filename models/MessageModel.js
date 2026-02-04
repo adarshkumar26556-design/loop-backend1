@@ -1,32 +1,29 @@
-const messageSchema = new mongoose.Schema({
-  
-  conversationId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Conversation",
-    required: true,
-  },
-  senderId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
+import mongoose from "mongoose";
 
-  text: String,
-  media: String,
+const messageSchema = new mongoose.Schema(
+    {
+        sender: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        recipient: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        text: {
+            type: String,
+        },
+        image: {
+            type: String,
+        },
+        isRead: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    { timestamps: true }
+);
 
-  // 👁️ Seen system
-  seen: {
-    type: Boolean,
-    default: false,
-  },
-
-  // 🔥 Vanish modes
-  vanishMode: {
-    type: String,
-    enum: ["none", "seen", "24h"],
-    default: "none",
-  },
-
-  deleteAfter: Date,
-
-}, { timestamps: true });
+export default mongoose.model("Message", messageSchema);

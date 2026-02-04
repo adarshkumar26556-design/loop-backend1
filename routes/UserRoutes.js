@@ -1,51 +1,83 @@
+// import express from "express";
+// import {
+//   registerUser,
+//   loginUser,
+//   getMyProfile,
+//   getUserProfile,
+//   togglePrivateAccount,
+//   updateProfile,
+//   toggleFollow,
+//   getFollowRequests,
+//   respondFollowRequest,
+//   getUserSuggestions,
+
+// } from "../controllers/UserController.js";
+
+// import { protect } from "../middleware/authMiddleware.js";
+
+// const UserRoute = express.Router();
+
+// UserRoute.post("/register", registerUser);
+// UserRoute.post("/login", loginUser);
+
+// UserRoute.get("/follow-requests", protect, getFollowRequests);
+// UserRoute.post("/follow-requests/respond", protect, respondFollowRequest);
+
+// // ✅ THIS MUST BE HERE
+// UserRoute.get("suggestions", protect, getUserSuggestions)
+
+
+// UserRoute.get("/getmyprofile", protect, getMyProfile);
+
+// UserRoute.put("/toggleprivate", protect, togglePrivateAccount);
+// UserRoute.put("/update-profile", protect, updateProfile);
+
+// UserRoute.put("/:userId/follow", protect, toggleFollow);
+
+// // ⚠️ ALWAYS LAST
+// UserRoute.get("/:username",protect, getUserProfile);
+
+// export default UserRoute;
 import express from "express";
 import {
+  registerUser,
+  loginUser,
   getMyProfile,
   getUserProfile,
-  loginUser,
-  registerUser,
-  togglePrivateAccount
+  togglePrivateAccount,
+  updateProfile,
+  toggleFollow,
+  getFollowRequests,
+  respondFollowRequest,
+  getUserSuggestions,
+  searchUsers,
+  toggleSavePost,
+  getSavedPosts,
 } from "../controllers/UserController.js";
 
-import protect from "../middleware/authMiddleware.js";
-import passport from "passport";
-import jwt from "jsonwebtoken";
+import { protect } from "../middleware/authMiddleware.js";
 
 const UserRoute = express.Router();
 
 UserRoute.post("/register", registerUser);
 UserRoute.post("/login", loginUser);
+
+UserRoute.get("/follow-requests", protect, getFollowRequests);
+UserRoute.post("/follow-requests/respond", protect, respondFollowRequest);
+
+UserRoute.get("/suggestions", protect, getUserSuggestions); // ✅ MUST BE HERE
+UserRoute.get("/search", protect, searchUsers);
+UserRoute.get("/saved", protect, getSavedPosts); // ✅ BEFORE /:username
+
 UserRoute.get("/getmyprofile", protect, getMyProfile);
-UserRoute.get("/:username", getUserProfile);
+
 UserRoute.put("/toggleprivate", protect, togglePrivateAccount);
+UserRoute.put("/update-profile", protect, updateProfile);
 
-/**
- * 🔐 GOOGLE AUTH
- */
-UserRoute.get(
-  "/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
+UserRoute.put("/:userId/follow", protect, toggleFollow);
+UserRoute.put("/:postId/save", protect, toggleSavePost); // ✅ BEFORE /:username
 
-UserRoute.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-    failureRedirect: "/login",
-  }),
-  (req, res) => {
-    const token = jwt.sign(
-      { id: req.user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
-    res.redirect(
-      `${process.env.CLIENT_URL}/oauth-success?token=${token}`
-    );
-  }
-);
+// ⚠️ ALWAYS LAST - Dynamic routes with params
+UserRoute.get("/:username", protect, getUserProfile);
 
 export default UserRoute;
