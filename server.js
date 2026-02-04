@@ -32,21 +32,21 @@ const __dirname = path.dirname(__filename);
 /* =========================
    MIDDLEWARES
 ========================= */
-const allowedOrigins = [
-  "http://localhost:5173",
+"http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:5175",
   "http://localhost:5176",
   "http://localhost:5177",
   "http://localhost:5178",
-];
+  process.env.FRONTEND_URL, // Allow generic frontend URL from env
 
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+
+  app.use(
+    cors({
+      origin: allowedOrigins,
+      credentials: true,
+    })
+  );
 
 app.use(express.json());
 app.use(passport.initialize());
