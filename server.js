@@ -68,23 +68,32 @@ app.get("/", (req, res) => {
 /* =========================
    SOCKET.IO
 ========================= */
+/* =========================
+   SOCKET.IO (Conditional)
+========================= */
 const server = http.createServer(app);
+let io;
 
-export const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins,
-    credentials: true,
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
-
-  socket.on("join", (userId) => {
-    socket.join(userId.toString());
-    console.log("User joined room:", userId);
+try {
+  io = new Server(server, {
+    cors: {
+      origin: allowedOrigins,
+      credentials: true,
+    },
   });
-});
+
+  io.on("connection", (socket) => {
+    console.log("Socket connected:", socket.id);
+    socket.on("join", (userId) => {
+      socket.join(userId.toString());
+      console.log("User joined room:", userId);
+    });
+  });
+} catch (err) {
+  console.warn("Socket.IO failed to initialize (ignored in serverless):", err);
+}
+
+export { io };
 
 /* =========================
    START SERVER
