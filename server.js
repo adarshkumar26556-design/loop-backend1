@@ -146,7 +146,8 @@ const allowedOrigins = [
   "http://localhost:5176",
   "http://localhost:5177",
   "http://localhost:5178",
-  "https://loop-frontend-ppjq.vercel.app" // 🔴 replace with your real Vercel frontend URL
+  "https://loop-frontend-ppjq.vercel.app",
+  "https://loop-frontend-ten.vercel.app"
 ];
 
 app.use(
