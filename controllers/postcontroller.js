@@ -1,4 +1,4 @@
-import Post from "../models/Postmodel.js";
+import Post from "../models/PostModel.js";
 import User from "../models/UserModel.js";
 import cloudinary from "../Config/cloudinary.js";
 import { emitToUser } from "../utils/socketEmit.js";
