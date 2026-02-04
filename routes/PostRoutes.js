@@ -13,7 +13,7 @@ import {
   replyToComment,
   deleteReply,
   getCommentLikes,
-} from "../controllers/postcontroller.js";
+} from "../controllers/PostController.js";
 
 
 import upload from "../middleware/uploadMiddleware.js";
