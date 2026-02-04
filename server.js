@@ -161,12 +161,13 @@ app.use(
 /* =========================
    MIDDLEWARES
 ========================= */
+app.use(express.json());
+app.use(passport.initialize());
+
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`, req.body);
   next();
 });
-app.use(express.json());
-app.use(passport.initialize());
 
 /* =========================
    ROUTES
