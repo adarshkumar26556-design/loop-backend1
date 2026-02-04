@@ -147,7 +147,8 @@ const allowedOrigins = [
   "http://localhost:5177",
   "http://localhost:5178",
   "https://loop-frontend-ppjq.vercel.app",
-  "https://loop-frontend-ten.vercel.app"
+  "https://loop-frontend-ten.vercel.app",
+  "https://loop-frontend-p0291qdrp-adarshkumar26556-designs-projects.vercel.app"
 ];
 
 app.use(
