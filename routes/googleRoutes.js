@@ -16,7 +16,7 @@ Authrouter.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: process.env.CLIENT_URL || "http://localhost:5173",
+    failureRedirect: process.env.CLIENT_URL || "https://loop-frontend-ten.vercel.app",
   }),
   (req, res) => {
     console.log("req.user:", req.user);
@@ -27,7 +27,7 @@ Authrouter.get(
       { expiresIn: "7d" }
     );
 
-    const clientUrl = process.env.CLIENT_URL || "http://localhost:5173";
+    const clientUrl = process.env.CLIENT_URL || "https://loop-frontend-ten.vercel.app";
     res.redirect(
       `${clientUrl}/google-success?token=${token}&userId=${req.user._id}`
     );
