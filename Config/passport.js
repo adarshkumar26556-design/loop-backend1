@@ -42,7 +42,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL || "https://loop-backend1.onrender.com/api/auth/google/callback",
+        callbackURL: "https://loop-backend1.onrender.com/api/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("DEBUG: Google Strategy Callback Reached");
