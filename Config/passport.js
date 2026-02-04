@@ -42,7 +42,7 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || "https://loop-backend1.onrender.com/api/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         console.log("DEBUG: Google Strategy Callback Reached");
@@ -60,8 +60,12 @@ if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
 
           // ➕ Create new user if not exists
           if (!user) {
+            // Generate unique username: name + 4 random digits
+            const baseName = profile.displayName.replace(/\s+/g, "").toLowerCase();
+            const uniqueUsername = `${baseName}${Math.floor(1000 + Math.random() * 9000)}`;
+
             user = await User.create({
-              username: profile.displayName.replace(/\s+/g, "").toLowerCase(),
+              username: uniqueUsername,
               email,
               avatar: profile.photos?.[0]?.value,
               isGoogleUser: true,
